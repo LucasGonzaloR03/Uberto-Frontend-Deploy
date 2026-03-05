@@ -1,0 +1,1 @@
+export const REST_SERVER_URL = import.meta.env.VITE_REST_SERVER_URL

@@ -1,0 +1,32 @@
+.body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 91vh;
+    font-family: var(--fuente-text);
+    color: #4e199e;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-logo-container {
+    margin-bottom: 0.5em;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.inputForm{
+    color: #4e199e;
+}
