@@ -6,12 +6,14 @@ import { pasajeroService } from "../../services/PasajeroService";
 import { useOnInit } from "../../utils/hooks";
 import { ErrorResponse, mostrarMensajeError } from "../../utils/errorHandling";
 import { Notificacion } from "../Modales/Notificacion";
+import { Spinner } from "../Spinner";
 
 const ViajesPasajero = () => {
   const [viajesPendientes, setViajesPendientes] = useState<TarjetaViaje[]>([]);
   const [viajesRealizados, setViajesRealizados] = useState<TarjetaViaje[]>([]);
   const [notificacion, setNotificacion] = useState({ open: false, mensaje: "", severidad: "success" as "success" | "error" });
   const [mensajeError, setMensajeError] =useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   useOnInit(() => {
     traerViajesRealizados();
@@ -19,26 +21,33 @@ const ViajesPasajero = () => {
   })
 
   const traerViajesRealizados = async () => {
+    setIsLoading(true)
     try {
       const todosViajes = await pasajeroService.getViajesRealizados();
       setViajesRealizados(todosViajes);
     } catch (error: unknown) {
       mostrarMensajeError(error as ErrorResponse,setMensajeError)
       setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"}) 
+    }finally{
+      setIsLoading(false)
     }
   };
 
   const traerViajesPendientes = async () => {
+    setIsLoading(true)
     try {
       const todosViajes = await pasajeroService.getViajesPendientes();
       setViajesPendientes(todosViajes);
     } catch (error: unknown) {
       mostrarMensajeError(error as ErrorResponse,setMensajeError)
       setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"}) 
+    }finally{
+      setIsLoading(false)
     }
   };
 
   const handleConfirmarCalificacion = async(idViaje:number,comentario:string,puntaje:number) => {
+    setIsLoading(true)
       try{
         pasajeroService.postCalificacion(idViaje,comentario,puntaje)
         setNotificacion({open:true, mensaje:'Se califico con exito el viaje', severidad:"success"})
@@ -48,6 +57,8 @@ const ViajesPasajero = () => {
       catch(error) {   
       mostrarMensajeError(error as ErrorResponse,setMensajeError)
       setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"}) 
+    }finally{
+      setIsLoading(false)
     }
   }
 
@@ -95,6 +106,7 @@ const ViajesPasajero = () => {
         severidad={notificacion.severidad}
         onClose={() => setNotificacion({ ...notificacion, open: false })}
       />
+      <Spinner isLoading={isLoading} />
     </Container>
   );  
 };

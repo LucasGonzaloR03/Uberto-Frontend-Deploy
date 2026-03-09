@@ -5,17 +5,19 @@ import { choferService } from "../../services/ChoferService";
 import { ErrorResponse, mostrarMensajeError } from "../../utils/errorHandling";
 import { useOnInit } from "../../utils/hooks";
 import { Notificacion } from "../Modales/Notificacion";
+import { Spinner } from "../Spinner";
 
 export const DatosChofer = () => {
     const [fromTouched,setFromTouched] = useState(false)
     const [infoChofer, setInfoChofer] = useState<Chofer>( new  Chofer() );
     const [notificacion, setNotificacion] = useState({ open: false, mensaje: "", severidad: "success" as "success" | "error" });
     const [mensajeError, setMensajeError] =useState("")
-   
+    const [isLoading, setIsLoading] = useState(false)
 
     useOnInit(() => { traerDatosChofer() })
   
     const traerDatosChofer = async () => {
+      setIsLoading(true)
       try {
         const infoChofer = await choferService.getDatosChofer()        
         setInfoChofer(infoChofer)      
@@ -26,6 +28,9 @@ export const DatosChofer = () => {
           mensaje:`${ mensajeError}`,
           severidad: 'error',
         })      
+      }
+      finally {
+        setIsLoading(false)
       }
     }
   
@@ -45,6 +50,7 @@ export const DatosChofer = () => {
     }
     
     const handleGuardarCambios = async () => {
+      setIsLoading(true)
       try {
         setFromTouched(true)
         if(comprobacionDeCamposIncompletos()) {
@@ -56,6 +62,8 @@ export const DatosChofer = () => {
       } catch (error) {
         mostrarMensajeError(error as ErrorResponse,setMensajeError)
         setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"})      
+      }finally {  
+        setIsLoading(false)
       }
     }
   
@@ -243,7 +251,7 @@ export const DatosChofer = () => {
         />
             
         <Button variant="contained" onClick={()=>handleGuardarCambios( )} fullWidth sx={{backgroundColor:'var(--secondary-color)'}}>
-           Guardar Cambios
+          Guardar Cambios
         </Button>
 
         <Notificacion
@@ -253,6 +261,7 @@ export const DatosChofer = () => {
           onClose={() => setNotificacion({ ...notificacion, open: false })}
         />
         
+        <Spinner isLoading={isLoading} />
       </Box>
     );
   };

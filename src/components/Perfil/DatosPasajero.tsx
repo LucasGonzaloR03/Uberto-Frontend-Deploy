@@ -8,6 +8,7 @@ import { AmigoDelAmigoDTO, Pasajero, TarjetaAmigo } from "../../domain/pasajero"
 import { pasajeroService } from "../../services/PasajeroService";
 import { ErrorResponse, mostrarMensajeError } from "../../utils/errorHandling";
 import { TextField, Button, Typography, Box, Divider, IconButton, InputAdornment, } from "@mui/material";
+import { Spinner } from "../Spinner";
 
 
 export const DatosPasajero = () => {
@@ -18,6 +19,7 @@ export const DatosPasajero = () => {
   const [infoPasajero, setInfoPasajero] = useState<Pasajero>(  new  Pasajero() );
   const [posiblesAmigos, setPosiblesAmigos] = useState<AmigoDelAmigoDTO[]>([])
   const [notificacion, setNotificacion] = useState({ open: false, mensaje: "", severidad: "success" as "success" | "error" });
+  const [isLoading, setIsLoading] = useState(false);
 
   useOnInit(() => {
     traerDatosPasajero()
@@ -25,22 +27,28 @@ export const DatosPasajero = () => {
   })
 
   const traerDatosPasajero = async () => {
+    setIsLoading(true)
     try {
       const infoPasajero = await pasajeroService.getDatosPasajero()
       setInfoPasajero(infoPasajero)
     } catch (error) {
       mostrarMensajeError(error as ErrorResponse,setMensajeError)
       setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"})
+    }finally {
+      setIsLoading(false)
     }
   }
 
   const traerPosiblesAmigos = async() => {
+    setIsLoading(true)
     try{
       const amigosPosiblesPasajeros=await pasajeroService.getAmigos()
       setPosiblesAmigos(amigosPosiblesPasajeros)
     }catch (error) {
       mostrarMensajeError(error as ErrorResponse,setMensajeError)
       setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"})
+    }finally{
+      setIsLoading(false)
     }
   }
 
@@ -65,6 +73,7 @@ export const DatosPasajero = () => {
 
 
   const handleGuardarCambios = async () => {
+    setIsLoading(true)
     try {
       setFromTouched(true)
       if(comprobacionDeCamposIncompletos()) {
@@ -77,10 +86,13 @@ export const DatosPasajero = () => {
     catch (error) {
       mostrarMensajeError(error as ErrorResponse,setMensajeError)
       setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"})    
+    }finally {
+      setIsLoading(false)
     }
   }
 
   const handleAgregarSaldo = async () => {
+    setIsLoading(true)
     try {
       await pasajeroService.putAgregarSaldo(saldoFormulario)
       setsaldoFormulario(0)
@@ -89,10 +101,13 @@ export const DatosPasajero = () => {
     } catch (error) {
       mostrarMensajeError(error as ErrorResponse,setMensajeError)
       setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"})
+    }finally {
+      setIsLoading(false)
     }
   }
 
   const agregarAmigo= async (idAmigo:number) => {
+    setIsLoading(true)
     try {
       await pasajeroService.postAgregarAmigo(idAmigo)
       traerDatosPasajero()
@@ -111,10 +126,13 @@ export const DatosPasajero = () => {
         mensaje:`${ mensajeError}'Error al agregar un amigo'`,
         severidad: 'error',
       })
-    };
+    }finally { 
+      setIsLoading(false)
+    }
   }
 
   const eliminarAmigo = async (amigoAEliminar: TarjetaAmigo) => {
+    setIsLoading(true)  
     try {
       await pasajeroService.deleteAmigo(amigoAEliminar.id)
       traerDatosPasajero()
@@ -132,6 +150,8 @@ export const DatosPasajero = () => {
         mensaje:`${ mensajeError}'Error al eliminar amigo'`,
         severidad: 'error',
       })
+    }finally{
+      setIsLoading(false)
     }
   }
   return (
@@ -273,7 +293,8 @@ export const DatosPasajero = () => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1 }}>
         <Typography sx={{ color: "var(--primary-color)", fontWeight: "bold" }}>Amigos</Typography>
         <IconButton onClick={() => setModalOpen(true)} sx={{ color: "var(--primary-color)" }}>
-        <PlusCircle size={32} />        </IconButton>
+          <PlusCircle size={32} />        
+        </IconButton>
       </Box>
 
       { infoPasajero.listaAmigos.map((amigo,index) => (
@@ -301,6 +322,7 @@ export const DatosPasajero = () => {
         onClose={() => setNotificacion({ ...notificacion, open: false })}
       />
 
+      <Spinner isLoading={isLoading} />
     </Box>
   );
 };

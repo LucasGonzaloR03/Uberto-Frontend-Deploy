@@ -10,6 +10,7 @@ import { CardViajeProps } from "../../components/Tarjetas/TarjetaViaje"
 import FiltroDeBusquedaDeViaje from "../../domain/filtroDeBusquedaDeViaje"
 import { obtenerUserTipo } from "../../services/UsuarioService"
 import { useOnInit } from "../../utils/hooks"
+import { Spinner } from "../../components/Spinner"
 
 const theme = createTheme({
     palette: {
@@ -38,10 +39,12 @@ export function HomeUsuario<T extends Viaje | FiltroDeBusquedaDeViaje, U extends
     const [mostrarNotificacion,setMostrarNotificacion] = useState(false)
     const [severidad,setSeveridad] = useState<'info'|'success'|'error'|'warning'>('info')
     const [viajeActual,setViajeActual] = useState<Viaje>(new Viaje())
+    const [ isLoading, setIsLoading ] = useState(false);
     const navigate = useNavigate()
 
     useOnInit(() => {
         const cargarViajesPendientesDelChofer = async () => {
+            setIsLoading(true);
             try {
                 const filtroDeViajeInicial = {
                     usuario: '', 
@@ -54,6 +57,8 @@ export function HomeUsuario<T extends Viaje | FiltroDeBusquedaDeViaje, U extends
             } catch (error:unknown) {
                 mostrarMensajeError(error as ErrorResponse,setMensajeNotificacion)
                 manejarErrorServidor()
+            } finally {
+                setIsLoading(false);
             }
         };
         if(obtenerUserTipo()){
@@ -67,6 +72,9 @@ export function HomeUsuario<T extends Viaje | FiltroDeBusquedaDeViaje, U extends
         if(!obtenerUserTipo()){
             setViajeActual(item as Viaje)
         }
+
+        setIsLoading(true)
+
         try{
             const data = await AccionDeServicio(item)
             setResultados(data)
@@ -79,6 +87,8 @@ export function HomeUsuario<T extends Viaje | FiltroDeBusquedaDeViaje, U extends
         }catch(error:unknown){
             mostrarMensajeError(error as ErrorResponse,setMensajeNotificacion)
             manejarErrorServidor()
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -160,6 +170,7 @@ export function HomeUsuario<T extends Viaje | FiltroDeBusquedaDeViaje, U extends
                         severidad={severidad}
                         onClose={cerrarNotificacion}
                     />
+                    <Spinner isLoading={isLoading} />
                 </Container>     
             </ThemeProvider>
         </>

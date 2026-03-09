@@ -8,6 +8,7 @@ import { Notificacion } from "../../components/Modales/Notificacion";
 import { UserLoginData } from "../../domain/usuario";
 import { loginService } from "../../services/LoginService";
 import { useOnInit } from "../../utils/hooks";
+import { Spinner } from "../../components/Spinner";
 
 
 const Login = () => {
@@ -23,7 +24,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const [fromTouched, setFromTouched] = useState(false)
   const [showPassword, setShowPassword] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => setUserName(e.target.value);
@@ -44,7 +45,7 @@ const Login = () => {
       );
       return;
     }
-
+    setIsLoading(true);
     try {
       const userData = new UserLoginData(userName, password)
       const usuarioLogueado = await loginService.login(userData.toJSON())
@@ -67,6 +68,9 @@ const Login = () => {
 
     } catch (error: unknown) {
       mostrarMensajeError(error as ErrorResponse, setErrorMessage)
+    }
+    finally{
+      setIsLoading(false);
     }
   };
 
@@ -153,6 +157,7 @@ const Login = () => {
           onClose={() => setErrorMessage('')}
         />
       </div>
+      <Spinner color="#4e199e" size="50px" isLoading={isLoading} />
     </Container>
   );
 };

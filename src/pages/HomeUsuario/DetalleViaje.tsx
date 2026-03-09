@@ -10,6 +10,7 @@ import { pasajeroService } from "../../services/PasajeroService";
 import { DetalleViajeDTO } from "../../domain/viaje";
 import { obtenerUserID } from "../../services/UsuarioService";
 import dayjs from "dayjs";
+import { Spinner } from "../../components/Spinner";
 
 export function DetalleViaje() {
     const [chofer, setChofer] = useState<DetalleChofer>(new DetalleChofer())
@@ -18,17 +19,21 @@ export function DetalleViaje() {
     const [severidad, setSeveridad] = useState<'info' | 'success' | 'error' | 'warning'>('info')
     const { idChofer, viajeSerializado } = useParams()
     const viaje = JSON.parse(decodeURIComponent(viajeSerializado || '{}'))
+    const [isLoading, setIsLoading] = useState(false)
 
     const navegar = useNavigate()
 
     useOnInit(()=>{
         const traerChofer = async () => {
+            setIsLoading(true)
             try {
                 const choferSeleccionado = await pasajeroService.getChoferDetalle(idChofer!)
                 setChofer(choferSeleccionado)
             } catch (error: unknown) {
                 mostrarMensajeError(error as ErrorResponse, setMensajeNotificacion)
                 manejarErrorServidor()
+            }finally{
+                setIsLoading(false)
             }
         }
 
@@ -37,6 +42,7 @@ export function DetalleViaje() {
 
     const manejarConfirmacion = async () => {
         const detalleViaje = new DetalleViajeDTO(viaje.origen, viaje.destino, viaje.fechaInicio, viaje.duracion, viaje.cantidadDePasajeros)
+        setIsLoading(true)
         try {
             await pasajeroService.postConfirmarViaje(detalleViaje, idChofer!, obtenerUserID())
             setMensajeNotificacion('Se confirmo el viaje con exito')
@@ -46,6 +52,8 @@ export function DetalleViaje() {
         } catch (error: unknown) {
             mostrarMensajeError(error as ErrorResponse, setMensajeNotificacion)
             manejarErrorServidor()
+        }finally{
+            setIsLoading(false)
         }
     }
 
@@ -195,6 +203,7 @@ export function DetalleViaje() {
                 severidad={severidad}
                 onClose={cerrarNotificacion}
             />
+            <Spinner isLoading={isLoading} />
         </Container>
     );
 }

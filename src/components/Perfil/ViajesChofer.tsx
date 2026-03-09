@@ -6,6 +6,7 @@ import CardViaje from "../Tarjetas/TarjetaViaje";
 import { useOnInit } from "../../utils/hooks";
 import { ErrorResponse, mostrarMensajeError } from "../../utils/errorHandling";
 import { Notificacion } from "../Modales/Notificacion";
+import { Spinner } from "../Spinner";
 
 const ViajesChofer = () => {
   const [viajesRealizados, setViajesRealizados] = useState<TarjetaViaje[]>([]);
@@ -13,6 +14,7 @@ const ViajesChofer = () => {
   const [mensajeNotificacion, setMensajeNotificacion] = useState('')
   const [mostrarNotificacion,setMostrarNotificacion] = useState(false)
   const [severidad,setSeveridad] = useState<'info'|'success'|'error'|'warning'>('info')
+  const [isLoading, setIsLoading] = useState(false)
 
   useOnInit(()=>{
     traerViajesRealizados()
@@ -20,22 +22,28 @@ const ViajesChofer = () => {
   })
 
   const traerViajesRealizados = async () => {
+    setIsLoading(true)
     try {
       const todosViajes = await choferService.getViajesRealizados();
       setViajesRealizados(todosViajes);
     } catch (error: unknown) {
       mostrarMensajeError(error as ErrorResponse, setMensajeNotificacion)
       manejarErrorServidor()
+    }finally{
+      setIsLoading(false)
     }
   };
 
   const actualizarSaldoChofer = async () => {
+    setIsLoading(true)
     try {
       const monto = await choferService.getImporteTotal();
       setSumatoriaTotal(monto);
     } catch (error: unknown) {
       mostrarMensajeError(error as ErrorResponse, setMensajeNotificacion)
       manejarErrorServidor()
+    }finally{
+      setIsLoading(false)
     }
   };
 
@@ -99,6 +107,7 @@ const ViajesChofer = () => {
         severidad={severidad}
         onClose={cerrarNotificacion}
       />
+      <Spinner isLoading={isLoading} />
     </Container>
   );
 };

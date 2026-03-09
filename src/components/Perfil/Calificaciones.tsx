@@ -8,14 +8,17 @@ import { useOnInit } from "../../utils/hooks";
 import { pasajeroService } from "../../services/PasajeroService";
 import { obtenerUserTipo } from "../../services/UsuarioService";
 import { choferService } from "../../services/ChoferService";
+import { Spinner } from "../Spinner";
 
 export const Calificaciones = () => {
   const [calificaciones, setCalificaciones] = useState<TarjetaCalificacion[]>([]);
   const [mensajeNotificacion, setMensajeNotificacion] = useState('')
   const [mostrarNotificacion,setMostrarNotificacion] = useState(false)
   const [severidad,setSeveridad] = useState<'info'|'success'|'error'|'warning'>('info')
+  const [isLoading, setIsLoading] = useState(false)
 
   const traerCalificaciones = async() => {
+    setIsLoading(true)
     try{
       if(obtenerUserTipo()){
         const calificacionesDelUsuario = await choferService.getCalificaciones()
@@ -28,10 +31,13 @@ export const Calificaciones = () => {
     }catch(error:unknown){
       mostrarMensajeError(error as ErrorResponse,setMensajeNotificacion)
       manejarErrorServidor()
+    }finally{
+      setIsLoading(false)
     }
   }
 
   const onEliminar = async (idCalificacion:number) => {
+    setIsLoading(true)
     try{
       pasajeroService.deleteCalificacion(idCalificacion)
       setMensajeNotificacion("Se elimininó calificación con éxito")
@@ -42,6 +48,8 @@ export const Calificaciones = () => {
     }catch(error:unknown){
       mostrarMensajeError(error as ErrorResponse,setMensajeNotificacion)
       manejarErrorServidor()
+    }finally{
+      setIsLoading(false)
     }
   }
 
@@ -83,6 +91,8 @@ export const Calificaciones = () => {
         severidad={severidad}
         onClose={cerrarNotificacion}
       />
+
+      <Spinner isLoading={isLoading} />
     </Box>
   );
 };
