@@ -13,6 +13,7 @@ import { TarjetaChofer } from './domain/tarjetaChofer';
 import { JSX } from 'react';
 import { choferService } from './services/ChoferService';
 import { Login } from './pages/Login/Login';
+import RegisterForm from './pages/Register/Register';
 
 
 const USER_KEY_ID_STORAGE = 'userLogedID';
@@ -26,6 +27,7 @@ const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<RegisterForm/>} />
             <Route path="/perfilUsuario" element = {ProtectedRoute(<PerfilUsuario/>)} />           
             <Route path="/detalleviaje/:idChofer/:viajeSerializado" element = {ProtectedRoute(<DetalleViaje/>)}/>
             <Route path="/homepasajero" element={ProtectedRoute(<HomeUsuario<Viaje,TarjetaChofer> Formulario={FormularioPasajero} AccionDeServicio={pasajeroService.getChoferesDisponibles} CardComponente={CardChofer}/>)}/>

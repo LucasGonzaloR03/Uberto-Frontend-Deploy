@@ -6,7 +6,7 @@ import FooterApp from './components/Pestanias/FooterApp';
 
 const AppContent = () => {
   const location = useLocation();
-  const hideHeaderFooter = location.pathname === '/login';
+  const hideHeaderFooter = location.pathname === '/login' || location.pathname === '/register';
   return (
     <>
       {!hideHeaderFooter && <HeaderApp/>}

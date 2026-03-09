@@ -145,6 +145,12 @@ const Login = () => {
         {fromTouched && !password && ( <FormHelperText>La contraseña es obligatoria</FormHelperText>)}
         </FormControl>
           <Button onClick={ingresar} variant="contained" size="large" sx={{ backgroundColor:"#4e199e",marginTop: 1, fontFamily: ['Roboto', 'sans-serif'], textTransform: 'none' }}>Ingresar</Button>
+          <Button 
+            onClick={() => navigate('/register')} 
+            sx={{ color: "#4e199e", textTransform: 'none', fontSize: '0.8rem' }}
+          >
+            ¿No tienes una cuenta? Registrate aquí
+          </Button>
         </FormControl>
         </form>
       </Box>
