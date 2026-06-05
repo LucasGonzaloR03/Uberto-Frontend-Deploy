@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 91vh;
+    min-height: 100vh;
     font-family: var(--fuente-text);
     color: #4e199e;
 }
