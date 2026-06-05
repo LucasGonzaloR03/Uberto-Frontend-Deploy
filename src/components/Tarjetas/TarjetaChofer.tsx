@@ -1,18 +1,18 @@
-import { Box, CardContent, Typography } from "@mui/material";
+import { Avatar, Box, CardContent, Typography } from "@mui/material";
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
-import TaxiAlertTwoToneIcon from '@mui/icons-material/TaxiAlertTwoTone';
 import { TarjetaChofer } from "../../types/tarjetaChofer";
-
 
 export interface CardChoferProps {
     tarjeta: TarjetaChofer;
-    alSeleccionarChofer:(idChofer:string) => void
+    alSeleccionarChofer: (idChofer: string) => void
 }
 
 export function CardChofer({ tarjeta, alSeleccionarChofer }: CardChoferProps) {    
-    
     return (
-        <CardContent sx={{ display:'flex', flexDirection: 'column', width: '20rem', height: 'auto', cursor: "pointer" }} onClick={() => alSeleccionarChofer(tarjeta.id)}>
+        <CardContent
+            sx={{ display: 'flex', flexDirection: 'column', width: '20rem', height: 'auto', cursor: "pointer" }}
+            onClick={() => alSeleccionarChofer(tarjeta.id)}
+        >
             <Box 
                 sx={{
                     display: 'flex', 
@@ -25,11 +25,15 @@ export function CardChofer({ tarjeta, alSeleccionarChofer }: CardChoferProps) {
                     justifyContent: 'space-between', 
                 }}
             >
-                <Typography color="white" sx={{ fontSize: "18px", textAlign: "start", flex: 1 }}> {tarjeta.patenteVehiculo} </Typography>
+                <Typography color="white" sx={{ fontSize: "18px", textAlign: "start", flex: 1 }}>
+                    {tarjeta.patenteVehiculo}
+                </Typography>
 
                 <StarRateRoundedIcon sx={{ color: 'white', marginRight: 0.5 }} />
 
-                <Typography color="white" sx={{ fontSize: "16px" }}> {tarjeta.puntajeChofer} </Typography>
+                <Typography color="white" sx={{ fontSize: "16px" }}>
+                    {tarjeta.puntajeChofer}
+                </Typography>
             </Box>
 
             <Box 
@@ -45,20 +49,23 @@ export function CardChofer({ tarjeta, alSeleccionarChofer }: CardChoferProps) {
                 }}
             >
                 <Box sx={{ flex: 1, textAlign: 'start', padding: 0.5 }}>
-                    <Typography color="primary" sx={{ fontSize: "16px" , fontWeight: 'bold' }}>
+                    <Typography color="primary" sx={{ fontSize: "16px", fontWeight: 'bold' }}>
                         {tarjeta.nombreCompleto}
                     </Typography>
                     <Typography color="secondary" sx={{ fontSize: "12px" }}>
                         {tarjeta.marcaVehiculo} | {tarjeta.modeloVehiculo}
                     </Typography>
-                    <Typography color="secondary" sx={{ fontSize: "18px"  ,fontWeight: 'bold' }}>
+                    <Typography color="secondary" sx={{ fontSize: "18px", fontWeight: 'bold' }}>
                         $ {tarjeta.costoComision}
                     </Typography>
                 </Box>
 
-                <Box sx={{ textAlign: 'center' }}>
-                    <TaxiAlertTwoToneIcon color="primary" sx={{ fontSize: "50px" }} />
-                </Box>
+                {/* FIX: reemplaza el ícono genérico de taxi por la foto real del chofer */}
+                <Avatar
+                    src={tarjeta.fotoPerfil ?? undefined}
+                    alt={tarjeta.nombreCompleto}
+                    sx={{ width: 52, height: 52, border: '2px solid', borderColor: 'primary.main' }}
+                />
             </Box> 
         </CardContent>
     )
