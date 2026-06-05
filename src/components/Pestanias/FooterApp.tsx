@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom"
 import { obtenerUserTipo } from "../../services/UsuarioService"
 
 function FooterApp(){
-    const [value,setValue]= useState(0)
+    const [value, setValue] = useState(0)
     const navegar = useNavigate()
 
-    const manejarNavegacion = (direccion:string) => {
+    const manejarNavegacion = (direccion: string) => {
         navegar(direccion)
     }
 
@@ -22,12 +22,21 @@ function FooterApp(){
             <BottomNavigation
                 showLabels
                 value={value}
-                onChange={(_event,newValue) => {setValue(newValue)}}
-                sx={{backgroundColor:'var(--primary-color)'}}
+                onChange={(_event, newValue) => { setValue(newValue) }}
+                sx={{ backgroundColor: 'var(--primary-color)' }}
             >
-                <BottomNavigationAction icon={<House color="white" weight="fill" size ={32} onClick={() => !obtenerUserTipo() ? manejarNavegacion('/homepasajero'): manejarNavegacion('/homechofer')}/>}/> 
-                <BottomNavigationAction icon={<UserCircle color="white" weight="bold" size={32} onClick={() =>  manejarNavegacion('/perfilUsuario')}/>}/>
-                <BottomNavigationAction icon={<SignOut color="white" weight="bold" size={32} onClick={salirDeLaApp}/>}/>
+                <BottomNavigationAction
+                    onClick={() => !obtenerUserTipo() ? manejarNavegacion('/homepasajero') : manejarNavegacion('/homechofer')}
+                    icon={<House color="white" weight="fill" size={32} />}
+                />
+                <BottomNavigationAction
+                    onClick={() => manejarNavegacion('/perfilUsuario')}
+                    icon={<UserCircle color="white" weight="bold" size={32} />}
+                />
+                <BottomNavigationAction
+                    onClick={salirDeLaApp}
+                    icon={<SignOut color="white" weight="bold" size={32} />}
+                />
             </BottomNavigation>
         </Paper>
     )

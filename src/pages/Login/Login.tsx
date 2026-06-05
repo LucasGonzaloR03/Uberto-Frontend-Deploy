@@ -9,21 +9,23 @@ import { UserLoginData } from "../../types/usuario";
 import { loginService } from "../../services/LoginService";
 import { useOnInit } from "../../utils/hooks";
 import { Spinner } from "../../components/Spinner";
+// FIX: claves importadas desde UsuarioService, no duplicadas acá
+import {
+  USER_KEY_ID_STORAGE,
+  USER_KEY_TIPO_STORAGE,
+  USER_KEY_FOTO_STORAGE,
+  USER_KEY_TOKEN_ACCESS,
+  USER_KEY_TOKEN_REFRESH,
+} from "../../services/UsuarioService";
 
 
 const Login = () => {
-
-  const USER_KEY_ID_STORAGE = 'userLogedID'
-  const USER_KEY_TIPO_STORAGE = 'tipoUsuario'
-  const USER_KEY_FOTO_STORAGE = 'fotoPerfil'
-  const USER_KEY_TOKEN_ACCESS = 'tokenAcceso'
-  const USER_KEY_TOKEN_REFRESH = 'tokenRefresco'
 
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('')
   const [fromTouched, setFromTouched] = useState(false)
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -52,8 +54,8 @@ const Login = () => {
       sessionStorage.setItem(USER_KEY_ID_STORAGE, usuarioLogueado.userLogedID.toString())
       sessionStorage.setItem(USER_KEY_TIPO_STORAGE, usuarioLogueado.tipoUsuario.toString())
       sessionStorage.setItem(USER_KEY_FOTO_STORAGE, usuarioLogueado.fotoPerfil.toString())
-      sessionStorage.setItem(USER_KEY_TOKEN_ACCESS, usuarioLogueado.tokenAcceso )
-      sessionStorage.setItem(USER_KEY_TOKEN_REFRESH, usuarioLogueado.tokenRefresco )
+      sessionStorage.setItem(USER_KEY_TOKEN_ACCESS, usuarioLogueado.tokenAcceso)
+      sessionStorage.setItem(USER_KEY_TOKEN_REFRESH, usuarioLogueado.tokenRefresco)
       
       switch (usuarioLogueado.tipoUsuario) {
         case "CHOFER":
@@ -163,7 +165,7 @@ const Login = () => {
           onClose={() => setErrorMessage('')}
         />
       </div>
-      <Spinner color="#4e199e" size="50px" isLoading={isLoading} />
+      <Spinner color="#4e199e" size={50} isLoading={isLoading} />
     </Container>
   );
 };

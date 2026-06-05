@@ -62,29 +62,32 @@ const Register = () => {
         }
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string ; value: unknown }>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
         const { name, value } = e.target
-
         setFormData({ ...formData, [name as string]: value })
     }
 
     const registrarse = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
         setFromTouched(true)
+
         const camposComunesVacios = !formData.nombre || !formData.apellido || !formData.username || !formData.password || !formData.role
         const passwordDiferente = formData.password !== formData.confirmPassword
-        const errorChofer = formData.role === 'CHOFER' && (!formData.patenteVehiculo || !formData.modeloVehiculo || !formData.marcaVehiculo || formData.tipoChofer === undefined || formData.precioBase === undefined)
+        const errorChofer = formData.role === 'CHOFER' && (!formData.patenteVehiculo || !formData.modeloVehiculo || !formData.marcaVehiculo || !formData.tipoChofer || !formData.precioBase)
         const errorPasajero = formData.role === 'PASAJERO' && (!formData.telefono || !formData.fechaNacimiento)
-        
-        if (camposComunesVacios || passwordDiferente || formData.role === 'CHOFER'? errorChofer : errorPasajero) {
+
+        const hayErrores = camposComunesVacios || passwordDiferente || errorChofer || errorPasajero
+        if (hayErrores) {
             setMensajeNotificacion(passwordDiferente ? 'Las contraseñas no coinciden' : 'Faltan completar campos obligatorios')
+            setSeveridad('error')
+            abrirNotificacion()
             return
         }
 
         setIsLoading(true)
         try {
             await registerService.register(formData)
-            setMensajeNotificacion('Se realizo el registro con exito.')
+            setMensajeNotificacion('Se realizó el registro con éxito.')
             setSeveridad('success')
             abrirNotificacion()
             setTimeout(() => { manejarNavegacion('/login') }, 2000)
@@ -125,7 +128,6 @@ const Register = () => {
             if (!response.ok) throw new Error("Error en la subida")
 
             const data = await response.json()
-            
             setFormData({ ...formData, fotoPerfil: data.secure_url })
         } catch (error) {
             setMensajeNotificacion("No se pudo subir la imagen a la nube.")
@@ -136,18 +138,14 @@ const Register = () => {
         }
     }
 
-    const manejarNavegacion = (direccion: string) => {
-        navigate(direccion)
-    }
+    const manejarNavegacion = (direccion: string) => { navigate(direccion) }
 
     const abrirNotificacion = () => {
         cerrarNotificacion()
         setTimeout(() => setMostrarNotificacion(true), 0)
     }
 
-    const cerrarNotificacion = () => {
-        setMostrarNotificacion(false)
-    }
+    const cerrarNotificacion = () => { setMostrarNotificacion(false) }
 
     const manejarErrorServidor = () => {
         setSeveridad('error')
@@ -200,7 +198,7 @@ const Register = () => {
                                 Foto de Perfil
                             </Typography>
                         </Box>
-                        {/* NOMBRE */}
+
                         <TextField
                             label="Nombre"
                             name="nombre"
@@ -211,7 +209,6 @@ const Register = () => {
                             sx={styleUberto}
                         />
 
-                        {/* APELLIDO */}
                         <TextField
                             label="Apellido"
                             name="apellido"
@@ -222,7 +219,6 @@ const Register = () => {
                             sx={styleUberto}
                         />
 
-                        {/* EMAIL */}
                         <TextField
                             label="Nombre de Usuario"
                             name="username"
@@ -233,7 +229,6 @@ const Register = () => {
                             sx={styleUberto}
                         />
 
-                        {/* PASSWORD */}
                         <FormControl variant="outlined" fullWidth error={fromTouched && !formData.password} sx={styleUberto}>
                             <InputLabel>Contraseña</InputLabel>
                             <OutlinedInput
@@ -252,7 +247,6 @@ const Register = () => {
                             {fromTouched && !formData.password && <FormHelperText>{errorHelper("La contraseña es obligatoria")}</FormHelperText>}
                         </FormControl>
 
-                        {/* CONFIRMAR PASSWORD */}
                         <FormControl variant="outlined" fullWidth error={fromTouched && formData.password !== formData.confirmPassword} sx={styleUberto}>
                             <InputLabel>Confirmar Contraseña</InputLabel>
                             <OutlinedInput
@@ -266,22 +260,19 @@ const Register = () => {
                             )}
                         </FormControl>
 
-                        {/* ROL SELECT */}
                         <FormControl fullWidth error={fromTouched && !formData.role} sx={styleUberto}>
                             <InputLabel>¿Qué quieres ser?</InputLabel>
                             <Select
                                 name="role"
                                 value={formData.role}
                                 label="¿Qué quieres ser?"
-                                onChange={(e) => handleChange(e as React.ChangeEvent<{ name?: string ; value: unknown }>)}
+                                onChange={(e) => handleChange(e as React.ChangeEvent<{ name?: string; value: unknown }>)}
                             >
                                 <MenuItem value="PASAJERO">Pasajero</MenuItem>
                                 <MenuItem value="CHOFER">Chofer</MenuItem>
                             </Select>
                             {fromTouched && !formData.role && <FormHelperText>Selecciona un rol</FormHelperText>}
                         </FormControl>
-
-                        {/* CAMPOS CONDICIONALES CHOFER */}
 
                         {formData.role === 'PASAJERO' && (
                             <Box sx={{ p: 2, border: '1px solid #4e199e', borderRadius: 1, display: 'flex', flexDirection: 'column', gap: 1.2 }}>
@@ -301,8 +292,7 @@ const Register = () => {
                                     size="small"
                                     fullWidth
                                     onChange={handleChange}
-                                    // IMPORTANTE: Esto hace que el label no se superponga con el input de fecha
-                                    InputLabelProps={{ shrink: true }} 
+                                    InputLabelProps={{ shrink: true }}
                                     error={fromTouched && !formData.fechaNacimiento}
                                     helperText={fromTouched && !formData.fechaNacimiento ? errorHelper("Requerido") : ""}
                                     sx={styleUberto}
@@ -318,7 +308,7 @@ const Register = () => {
                                         name="tipoChofer"
                                         value={formData.tipoChofer}
                                         label="Categoría de Servicio"
-                                        onChange={(e) => handleChange(e as React.ChangeEvent<{ name?: string ; value: unknown }>)}
+                                        onChange={(e) => handleChange(e as React.ChangeEvent<{ name?: string; value: unknown }>)}
                                     >
                                         <MenuItem value="CSIMPLE">Estándar (Simple)</MenuItem>
                                         <MenuItem value="CPREMIUM">Premium</MenuItem>
@@ -332,7 +322,7 @@ const Register = () => {
                                     name="patenteVehiculo"
                                     size="small"
                                     onChange={handleChange}
-                                    error={fromTouched && (!formData.patenteVehiculo)}
+                                    error={fromTouched && !formData.patenteVehiculo}
                                     helperText={fromTouched && !formData.patenteVehiculo ? errorHelper("Requerido") : "Formato: AAA000 o AA000AA"}
                                     placeholder="AAA000 o AA000AA"
                                     sx={styleUberto}
@@ -344,7 +334,7 @@ const Register = () => {
                                     size="small"
                                     onChange={handleChange}
                                     error={fromTouched && !formData.marcaVehiculo}
-                                    helperText={fromTouched && !formData.marcaVehiculo? errorHelper("Requerido") : ""}
+                                    helperText={fromTouched && !formData.marcaVehiculo ? errorHelper("Requerido") : ""}
                                     sx={styleUberto}
                                 />
 
@@ -354,7 +344,7 @@ const Register = () => {
                                     size="small"
                                     onChange={handleChange}
                                     error={fromTouched && !formData.modeloVehiculo}
-                                    helperText={fromTouched && !formData.modeloVehiculo? errorHelper("Requerido") : ""}
+                                    helperText={fromTouched && !formData.modeloVehiculo ? errorHelper("Requerido") : ""}
                                     sx={styleUberto}
                                 />
 
@@ -364,8 +354,9 @@ const Register = () => {
                                     type="number"
                                     size="small"
                                     onChange={handleChange}
-                                    error={fromTouched && !formData.precioBase}
-                                    helperText={fromTouched && !formData.precioBase? errorHelper("Requerido") : ""}
+                                    // FIX: precioBase=0 también es inválido como precio
+                                    error={fromTouched && (!formData.precioBase || Number(formData.precioBase) <= 0)}
+                                    helperText={fromTouched && (!formData.precioBase || Number(formData.precioBase) <= 0) ? errorHelper("Requerido, debe ser mayor a 0") : ""}
                                     sx={styleUberto}
                                 />
                             </Box>
@@ -396,7 +387,7 @@ const Register = () => {
                 severidad={severidad}
                 onClose={cerrarNotificacion}
             />
-            <Spinner color="#4e199e" size="50px" isLoading={isLoading} />
+            <Spinner color="#4e199e" size={50} isLoading={isLoading} />
         </Container>
     )
 }

@@ -99,26 +99,6 @@ export function CardViaje({ tarjeta, esRealizado, manejarCalificacion }: CardVia
           </Typography>
         </Box>
 
-        {/* INFORMACIÓN DEL VEHÍCULO (Si es chofer) */}
-        {obtenerUserTipo() === false && tarjeta.chofer && (
-          <Box sx={{ width: '100%', mt: 1.5, pt: 1.5, borderTop: '1px solid #ddd' }}>
-            <Typography sx={{ color: "black", fontSize: "11px", fontWeight: 'bold', mb: 0.5 }}>
-              Vehículo
-            </Typography>
-            {tarjeta.chofer.fotoVehiculo && (
-              <img
-                src={tarjeta.chofer.fotoVehiculo}
-                alt="Vehículo"
-                style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '6px', marginBottom: '6px' }}
-              />
-            )}
-            <Typography sx={{ color: "black", fontSize: "11px" }}>
-              {tarjeta.chofer.marcaVehiculo} {tarjeta.chofer.modeloVehiculo}
-              {tarjeta.chofer.anioVehiculo && ` (${tarjeta.chofer.anioVehiculo})`}
-            </Typography>
-          </Box>
-        )}
-
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
 
           <Typography color="secondary" sx={{ color: "black", fontSize: "15.5px", fontWeight: 'bold' }}>
