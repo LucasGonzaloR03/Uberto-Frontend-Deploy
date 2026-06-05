@@ -4,7 +4,7 @@ import { PlusCircle } from "@phosphor-icons/react";
 import CardAmigo from "../Tarjetas/TarjetaAmigo";
 import{ Notificacion}from "../Modales/Notificacion";
 import {CardAgregarAmigo} from "../Modales/ModalAgregarAmigo";
-import { AmigoDelAmigoDTO, Pasajero, TarjetaAmigo } from "../../domain/pasajero";
+import { AmigoDelAmigoDTO, Pasajero, TarjetaAmigo } from "../../types/pasajero";
 import { pasajeroService } from "../../services/PasajeroService";
 import { ErrorResponse, mostrarMensajeError } from "../../utils/errorHandling";
 import { TextField, Button, Typography, Box, Divider, IconButton, InputAdornment, } from "@mui/material";

@@ -1,5 +1,5 @@
 import { Box, CardContent, Typography } from "@mui/material";
-import { RegistroClicks } from "../../domain/registroClicks";
+import { RegistroClicks } from "../../types/registroClicks";
 import { Alarm, CalendarDots, CursorClick } from "@phosphor-icons/react";
 import dayjs from "dayjs";
 

@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
-import { Viaje } from "../../domain/viaje";
+import { Viaje } from "../../types/viaje";
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -15,13 +15,13 @@ export function FormularioPasajero({onSubmit}:FormularioPasajeroProps){
     const [fromTouched,setFromTouched] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
     const [viaje,setViaje] = useState<Viaje>(new Viaje())
-    const [fecha, setFecha] = useState<Dayjs | null>(dayjs(viaje.fechaInicio))
+    const [fecha, setFecha] = useState<Dayjs | null>(viaje.fechaInicio ? dayjs(viaje.fechaInicio) : dayjs())
 
     useOnInit(() => {
         const obtenerUltimaBusquedaDeViajePasajero = async () => {
             const ultimaBusquedaDeViaje = await pasajeroService.getUltimaBusquedaDeUnViaje()
             setViaje(ultimaBusquedaDeViaje)
-            setFecha(dayjs(ultimaBusquedaDeViaje.fechaInicio))
+            setFecha(ultimaBusquedaDeViaje.fechaInicio ? dayjs(ultimaBusquedaDeViaje.fechaInicio) : dayjs())
         }
 
         obtenerUltimaBusquedaDeViajePasajero()
@@ -49,6 +49,21 @@ export function FormularioPasajero({onSubmit}:FormularioPasajeroProps){
     const generarNuevoViaje = (viaje: Viaje) => {
         const nuevoViaje = Object.assign(new Viaje(), viaje)
         setViaje(nuevoViaje)
+    }
+
+    const manejarCambioDeFecha = (nuevaFecha: Dayjs | null) => {
+        if (nuevaFecha && nuevaFecha.isValid()) {
+            setError(null)
+            setFecha(nuevaFecha)
+            const fechaFromateada = nuevaFecha.format('YYYY-MM-DDTHH:mm:ss')
+            manejoDeCreacionDeUnViaje('fechaInicio', fechaFromateada)
+        } else if (nuevaFecha && !nuevaFecha.isValid()) {
+            setError('Por favor, selecciona una fecha válida.')
+            setFecha(dayjs(viaje.fechaInicio))
+        } else{
+            setError('La fecha es obligatoria.')
+            setFecha(dayjs(viaje.fechaInicio))
+        }
     }
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
@@ -133,16 +148,7 @@ export function FormularioPasajero({onSubmit}:FormularioPasajeroProps){
                 value={fecha}
                 defaultValue={dayjs()}
                 minDateTime={dayjs()}
-                onChange={(newDate) => {
-                    if (newDate && newDate.isValid()) {
-                        setError(null);
-                        setFecha(newDate);
-                        manejoDeCreacionDeUnViaje('fechaInicio', newDate.toISOString());
-                    } else {
-                        setError('Por favor, selecciona una fecha válida.');
-                        setFecha(dayjs(viaje.fechaInicio)); 
-                    }
-                }}
+                onChange={manejarCambioDeFecha}
                 slotProps={{
                     textField: {
                         error: !!error,

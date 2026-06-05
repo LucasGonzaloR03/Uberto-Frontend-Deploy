@@ -1,6 +1,6 @@
 import { useState } from "react";
 import TarjetaComentario from "../Tarjetas/TarjetaComentario";
-import { TarjetaCalificacion } from "../../domain/calificacion";
+import { TarjetaCalificacion } from "../../types/calificacion";
 import { Box, Typography} from "@mui/material";
 import { ErrorResponse, mostrarMensajeError } from "../../utils/errorHandling";
 import { Notificacion } from "../Modales/Notificacion";

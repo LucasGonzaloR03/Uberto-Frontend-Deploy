@@ -1,6 +1,6 @@
 import { Typography, Box, Container } from "@mui/material";
 import { useState } from "react";
-import { TarjetaViaje } from "../../domain/viaje";
+import { TarjetaViaje } from "../../types/viaje";
 import { choferService } from "../../services/ChoferService";
 import CardViaje from "../Tarjetas/TarjetaViaje";
 import { useOnInit } from "../../utils/hooks";
@@ -27,8 +27,14 @@ const ViajesChofer = () => {
       const todosViajes = await choferService.getViajesRealizados();
       setViajesRealizados(todosViajes);
     } catch (error: unknown) {
-      mostrarMensajeError(error as ErrorResponse, setMensajeNotificacion)
-      manejarErrorServidor()
+      if ((error as ErrorResponse).response?.status === 404) {
+        setMensajeNotificacion((error as ErrorResponse).response?.data?.message || 'No se encontraron viajes realizados.')
+        setSeveridad('info')
+        abrirNotificacion()
+      }else{
+        mostrarMensajeError(error as ErrorResponse,setMensajeNotificacion)
+        manejarErrorServidor()  
+      }
     }finally{
       setIsLoading(false)
     }

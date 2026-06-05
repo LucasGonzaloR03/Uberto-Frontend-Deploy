@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { REST_SERVER_URL } from './constants/constants';
-import { UserLogin, UserLoginResponseDTO } from '../domain/usuario';
+import { UserLogin, UserLoginResponseDTO } from '../types/usuario';
 
 class LoginService {
 

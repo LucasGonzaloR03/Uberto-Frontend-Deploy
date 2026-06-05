@@ -1,12 +1,12 @@
 import { REST_SERVER_URL } from "./constants/constants";
-import { TarjetaChoferJSON, TarjetaChofer } from "../domain/tarjetaChofer";
-import { AmigoDelAmigoDTO, AmigoDelAmigoJSON, Pasajero, PasajeroJSON } from "../domain/pasajero";
+import { TarjetaChoferJSON, TarjetaChofer } from "../types/tarjetaChofer";
+import { AmigoDelAmigoDTO, AmigoDelAmigoJSON, Pasajero, PasajeroJSON } from "../types/pasajero";
 import { obtenerUserID } from "./UsuarioService";
-import { DetalleViajeDTO, TarjetaViaje, TarjetaViajeJSON, Viaje, ViajeJSON } from "../domain/viaje";
+import { DetalleViajeDTO, TarjetaViaje, TarjetaViajeJSON, Viaje, ViajeJSON } from "../types/viaje";
 
-import { TarjetaCalificacion, TarjetaCalificacionJSON } from "../domain/calificacion";
+import { TarjetaCalificacion, TarjetaCalificacionJSON } from "../types/calificacion";
 import { httpRequest } from "./constants/common";
-import { DetalleChofer, DetalleChoferJSON } from "../domain/chofer";
+import { DetalleChofer, DetalleChoferJSON } from "../types/chofer";
 
 
 class PasajeroService {

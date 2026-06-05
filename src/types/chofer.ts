@@ -10,7 +10,7 @@ export class Chofer{
         public patenteVehiculo = '',
         public precioBase:number = 0,
         public fotoPerfil:string = '',
-        public tipoChofer:string  = ''
+        public tipoChofer:string  = '',
     ){}
     
     public nombreCompleto:string = `${this.nombre} ${this.apellido}`
@@ -39,7 +39,7 @@ export class Chofer{
             patenteVehiculo:this.patenteVehiculo,
             precioBase:this.precioBase,
             fotoPerfil:this.fotoPerfil,
-            tipoChofer: this.tipoChofer
+            tipoChofer: this.tipoChofer,
         }
     }
 
@@ -57,7 +57,7 @@ export type ChoferJSON = {
     patenteVehiculo:string,
     precioBase:number,
     fotoPerfil:string,
-    tipoChofer:string
+    tipoChofer:string,
 }
 
 export class DetalleChofer{
@@ -101,22 +101,34 @@ export type DetalleChoferJSON = {
 export class ChoferParaTarjeta{
     constructor(
     public fotoPerfil: string,
-    public nombreCompleto: string
+    public nombreCompleto: string,
+    public marcaVehiculo: string = '',
+    public modeloVehiculo: string = '',
+    public fotoVehiculo: string = '',
+    public anioVehiculo: number = 0
     ){}
 
     static fromJson(choferParaTarjetaJSON:ChoferParaTarjetaJSON):ChoferParaTarjeta{
         return Object.assign(new ChoferParaTarjeta(
             choferParaTarjetaJSON.fotoPerfil,
-            choferParaTarjetaJSON.nombreCompleto
+            choferParaTarjetaJSON.nombreCompleto,
+            choferParaTarjetaJSON.marcaVehiculo || '',
+            choferParaTarjetaJSON.modeloVehiculo || '',
+            choferParaTarjetaJSON.fotoVehiculo || '',
+            choferParaTarjetaJSON.anioVehiculo || 0
         ))
     }
 
-    
+
 }
 
 export type ChoferParaTarjetaJSON = {
     fotoPerfil:string,
-    nombreCompleto:string
+    nombreCompleto:string,
+    marcaVehiculo?: string,
+    modeloVehiculo?: string,
+    fotoVehiculo?: string,
+    anioVehiculo?: number
 }
 
 export function tipoChoferAStrPerfil(tipoChofer:string): string{

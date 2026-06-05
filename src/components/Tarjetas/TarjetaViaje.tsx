@@ -1,5 +1,5 @@
 import { Box, Button, CardContent, Divider, Typography } from '@mui/material';
-import { TarjetaViaje } from '../../domain/viaje';
+import { TarjetaViaje } from '../../types/viaje';
 import PeopleIcon from '@mui/icons-material/People';
 import dayjs from "dayjs";
 import { obtenerUserTipo } from '../../services/UsuarioService';
@@ -56,7 +56,7 @@ export function CardViaje({ tarjeta, esRealizado, manejarCalificacion }: CardVia
         />
       </Box>
 
-      <Box 
+      <Box
         sx={{
           padding: '8px 16px',
           borderBottomLeftRadius: 15,
@@ -71,7 +71,7 @@ export function CardViaje({ tarjeta, esRealizado, manejarCalificacion }: CardVia
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
 
           <Typography sx={{ color: "black", fontSize: "12px", fontWeight: 'bold' }}>
-            Desde  
+            Desde
           </Typography>
           <Typography sx={{ color: "black", fontSize: "12px" }}>
 
@@ -82,7 +82,7 @@ export function CardViaje({ tarjeta, esRealizado, manejarCalificacion }: CardVia
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
 
           <Typography sx={{ color: "black", fontSize: "12px", fontWeight: 'bold' }}>
-            Hacia  
+            Hacia
           </Typography>
           <Typography sx={{ color: "black", fontSize: "12px" }}>
             {tarjeta.destino}
@@ -92,17 +92,37 @@ export function CardViaje({ tarjeta, esRealizado, manejarCalificacion }: CardVia
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
 
           <Typography sx={{ color: "black", fontSize: "12px", fontWeight: 'bold' }}>
-            Horario 
+            Horario
           </Typography>
           <Typography sx={{ color: "black", fontSize: "12px" }}>
             {fechaViaje}  |  {convertirHora(tarjeta.fechaInicio)} - {convertirHora(tarjeta.fechaFin)} hs
           </Typography>
         </Box>
 
+        {/* INFORMACIÓN DEL VEHÍCULO (Si es chofer) */}
+        {obtenerUserTipo() === false && tarjeta.chofer && (
+          <Box sx={{ width: '100%', mt: 1.5, pt: 1.5, borderTop: '1px solid #ddd' }}>
+            <Typography sx={{ color: "black", fontSize: "11px", fontWeight: 'bold', mb: 0.5 }}>
+              Vehículo
+            </Typography>
+            {tarjeta.chofer.fotoVehiculo && (
+              <img
+                src={tarjeta.chofer.fotoVehiculo}
+                alt="Vehículo"
+                style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '6px', marginBottom: '6px' }}
+              />
+            )}
+            <Typography sx={{ color: "black", fontSize: "11px" }}>
+              {tarjeta.chofer.marcaVehiculo} {tarjeta.chofer.modeloVehiculo}
+              {tarjeta.chofer.anioVehiculo && ` (${tarjeta.chofer.anioVehiculo})`}
+            </Typography>
+          </Box>
+        )}
+
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
 
           <Typography color="secondary" sx={{ color: "black", fontSize: "15.5px", fontWeight: 'bold' }}>
-            Importe 
+            Importe
           </Typography>
           <Typography color="secondary" sx={{ color: "black", fontSize: "15.5px" }}>
             $ {!obtenerUserTipo() ? tarjeta.importeComision : tarjeta.importeNormal}

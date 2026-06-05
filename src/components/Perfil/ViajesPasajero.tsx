@@ -1,5 +1,5 @@
 import { Typography, Box, Container } from "@mui/material";
-import { TarjetaViaje } from "../../domain/viaje";
+import { TarjetaViaje } from "../../types/viaje";
 import { useState } from "react";
 import CardViaje from "../Tarjetas/TarjetaViaje";
 import { pasajeroService } from "../../services/PasajeroService";
@@ -11,7 +11,7 @@ import { Spinner } from "../Spinner";
 const ViajesPasajero = () => {
   const [viajesPendientes, setViajesPendientes] = useState<TarjetaViaje[]>([]);
   const [viajesRealizados, setViajesRealizados] = useState<TarjetaViaje[]>([]);
-  const [notificacion, setNotificacion] = useState({ open: false, mensaje: "", severidad: "success" as "success" | "error" });
+  const [notificacion, setNotificacion] = useState({ open: false, mensaje: "", severidad: "success" as "success" | "error" | "info" });
   const [mensajeError, setMensajeError] =useState("")
   const [isLoading, setIsLoading] = useState(false)
 
@@ -26,8 +26,12 @@ const ViajesPasajero = () => {
       const todosViajes = await pasajeroService.getViajesRealizados();
       setViajesRealizados(todosViajes);
     } catch (error: unknown) {
-      mostrarMensajeError(error as ErrorResponse,setMensajeError)
-      setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"}) 
+      if ((error as ErrorResponse).response?.status === 404) {
+        setNotificacion({open:true, mensaje:(error as ErrorResponse).response?.data?.message || 'No se encontraron viajes realizados.', severidad:"info"})
+      }else{
+        mostrarMensajeError(error as ErrorResponse,setMensajeError)
+        setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"})
+      }
     }finally{
       setIsLoading(false)
     }
@@ -39,8 +43,12 @@ const ViajesPasajero = () => {
       const todosViajes = await pasajeroService.getViajesPendientes();
       setViajesPendientes(todosViajes);
     } catch (error: unknown) {
-      mostrarMensajeError(error as ErrorResponse,setMensajeError)
-      setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"}) 
+      if ((error as ErrorResponse).response?.status === 404) {
+        setNotificacion({open:true, mensaje:(error as ErrorResponse).response?.data?.message || 'No se encontraron viajes pendientes.', severidad:"info"})
+      }else{
+        mostrarMensajeError(error as ErrorResponse,setMensajeError)
+        setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"})
+      }
     }finally{
       setIsLoading(false)
     }

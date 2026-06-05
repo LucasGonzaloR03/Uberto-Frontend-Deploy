@@ -1,11 +1,11 @@
-import { TarjetaCalificacion, TarjetaCalificacionJSON } from "../domain/calificacion";
-import { Chofer, ChoferJSON } from "../domain/chofer";
-import FiltroDeBusquedaDeViaje from "../domain/filtroDeBusquedaDeViaje";
-import { TarjetaViaje, TarjetaViajeJSON } from "../domain/viaje";
+import { TarjetaCalificacion, TarjetaCalificacionJSON } from "../types/calificacion";
+import { Chofer, ChoferJSON } from "../types/chofer";
+import FiltroDeBusquedaDeViaje from "../types/filtroDeBusquedaDeViaje";
+import { TarjetaViaje, TarjetaViajeJSON } from "../types/viaje";
 import { REST_SERVER_URL } from "./constants/constants";
 import { obtenerUserID } from "./UsuarioService";
 import { httpRequest } from "./constants/common";
-import { RegistroClicks, RegistroClicksJSON } from "../domain/registroClicks";
+import { RegistroClicks, RegistroClicksJSON } from "../types/registroClicks";
 
 class ChoferService {
 

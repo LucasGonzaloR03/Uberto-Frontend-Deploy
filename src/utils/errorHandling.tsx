@@ -9,28 +9,29 @@ const REQUEST_TIMEOUT = 408
 export const mostrarMensajeError = (error: ErrorResponse, setearMensaje: (mensaje: string) => void) => {
   const status = error.response?.status
   let mensajeError = error.response?.data?.message || 'Error desconocido'
+  const mensajeDeErrorEncontrado = error.response?.data?.message ? true : false
   
   if (status === 0) {
     mensajeError = 'Estamos trabajando para vos :)\nDisculpa las molestias!'
   } else if (status === INTERNAL_SERVER_ERROR) {
     mensajeError = 'Error en la operación.\nConsulta al administrador del sistema.'
     console.error(error)
-  } else if (status === BAD_REQUEST) {
+  } else if (status === BAD_REQUEST && !mensajeDeErrorEncontrado) {
     mensajeError = 'Error en la operación.\nVerifica los datos enviados.'
     console.error(error)
-  } else if (status === UNAUTHORIZED) {
+  } else if (status === UNAUTHORIZED && !mensajeDeErrorEncontrado) {
     mensajeError = 'Operación no autorizada.'
     console.error(error)
-  } else if (status === FORBIDDEN) { 
+  } else if (status === FORBIDDEN && !mensajeDeErrorEncontrado) { 
     mensajeError = 'No tienes permisos para realizar esta acción.'
     console.error(error)
-  } else if (status === NOT_FOUND) {
+  } else if (status === NOT_FOUND && !mensajeDeErrorEncontrado) {
     mensajeError = 'Url o usuario no encontrado.\nVerifica los datos ingresados.'
     console.error(error)
-  } else if (status === METHOD_NOT_ALLOWED) {
+  } else if (status === METHOD_NOT_ALLOWED && !mensajeDeErrorEncontrado) {
     mensajeError = 'Recurso solicitado no existe o imposible acceder.'
     console.error(error)
-  } else if (status === REQUEST_TIMEOUT) {
+  } else if (status === REQUEST_TIMEOUT && !mensajeDeErrorEncontrado) {
     mensajeError = 'La operación está tardando en responder.\nInténtalo más tarde.'
     console.error(error)
   } else if (!status) {

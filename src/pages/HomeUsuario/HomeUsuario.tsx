@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom"
 import { CardChoferProps } from "../../components/Tarjetas/TarjetaChofer"
-import { TarjetaChofer } from "../../domain/tarjetaChofer"
-import { DetalleViajeDTO, TarjetaViaje, Viaje } from "../../domain/viaje"
+import { TarjetaChofer } from "../../types/tarjetaChofer"
+import { DetalleViajeDTO, TarjetaViaje, Viaje } from "../../types/viaje"
 import { Box, Container, createTheme, Divider, ThemeProvider, Typography } from "@mui/material"
 import { Notificacion } from "../../components/Modales/Notificacion"
 import React, { useState } from "react"
 import { ErrorResponse, mostrarMensajeError } from "../../utils/errorHandling"
 import { CardViajeProps } from "../../components/Tarjetas/TarjetaViaje"
-import FiltroDeBusquedaDeViaje from "../../domain/filtroDeBusquedaDeViaje"
+import FiltroDeBusquedaDeViaje from "../../types/filtroDeBusquedaDeViaje"
 import { obtenerUserTipo } from "../../services/UsuarioService"
 import { useOnInit } from "../../utils/hooks"
 import { Spinner } from "../../components/Spinner"
@@ -54,9 +54,15 @@ export function HomeUsuario<T extends Viaje | FiltroDeBusquedaDeViaje, U extends
                 };
                 const respuesta = await AccionDeServicio(filtroDeViajeInicial as T);
                 setResultados(respuesta)
-            } catch (error:unknown) {
-                mostrarMensajeError(error as ErrorResponse,setMensajeNotificacion)
-                manejarErrorServidor()
+            }catch (error:unknown) {
+                if ((error as ErrorResponse).response?.status === 404) {
+                    setMensajeNotificacion((error as ErrorResponse).response?.data?.message || 'No se encontraron viajes pendientes.')
+                    setSeveridad('info')
+                    abrirNotificacion()
+                }else{
+                    mostrarMensajeError(error as ErrorResponse,setMensajeNotificacion)
+                    manejarErrorServidor()  
+                }
             } finally {
                 setIsLoading(false);
             }
@@ -156,12 +162,16 @@ export function HomeUsuario<T extends Viaje | FiltroDeBusquedaDeViaje, U extends
                     </Typography>
 
                     <Box sx={{display:'flex',justifyContent:'center',flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', width:'100%'}}>
-                    {resultados.map((item, index) => (
+                    {resultados.length === 0 ? (
+                        <Typography variant="body1" color="textSecondary">
+                            {obtenerUserTipo() ? 'No hay viajes disponibles para realizar.' : 'Realice la búsqueda para ver resultados.'}
+                        </Typography>
+                    ) : resultados.map((item, index) => (
                         <CardComponente
                             {...getCardProps(item)}
                             key={index}
                             />
-                        ))}
+                    ))}
                     </Box>
 
                     <Notificacion

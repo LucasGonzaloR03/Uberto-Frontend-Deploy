@@ -1,7 +1,7 @@
 import { Box, CardContent, Typography } from "@mui/material";
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import TaxiAlertTwoToneIcon from '@mui/icons-material/TaxiAlertTwoTone';
-import { TarjetaChofer } from "../../domain/tarjetaChofer";
+import { TarjetaChofer } from "../../types/tarjetaChofer";
 
 
 export interface CardChoferProps {

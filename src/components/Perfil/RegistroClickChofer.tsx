@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RegistroClicks } from "../../domain/registroClicks";
+import { RegistroClicks } from "../../types/registroClicks";
 import { useOnInit } from "../../utils/hooks";
 import { choferService } from "../../services/ChoferService";
 import { Box, Container, Typography } from "@mui/material";

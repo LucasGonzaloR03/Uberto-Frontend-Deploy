@@ -63,8 +63,8 @@ export class TarjetaViaje{
     static fromJson(tarjetaViajeJSON:TarjetaViajeJSON):TarjetaViaje{
         return Object.assign(new TarjetaViaje(
             tarjetaViajeJSON.id,
-            tarjetaViajeJSON.pasajero,
-            tarjetaViajeJSON.chofer,
+            PasajeroParaTarjeta.fromJson(tarjetaViajeJSON.pasajero),
+            ChoferParaTarjeta.fromJson(tarjetaViajeJSON.chofer),
             tarjetaViajeJSON.cantidadDePasajeros,
             tarjetaViajeJSON.origen,
             tarjetaViajeJSON.destino,

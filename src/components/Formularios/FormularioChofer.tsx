@@ -2,7 +2,7 @@ import { useState } from "react";
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, TextField, IconButton, Button } from "@mui/material";
-import FiltroDeBusquedaDeViaje from "../../domain/filtroDeBusquedaDeViaje";
+import FiltroDeBusquedaDeViaje from "../../types/filtroDeBusquedaDeViaje";
 
 export interface FormularioChoferProps{ onSubmit: (filtroViaje:FiltroDeBusquedaDeViaje) => void }
 

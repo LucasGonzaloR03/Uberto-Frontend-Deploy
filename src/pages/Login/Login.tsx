@@ -5,7 +5,7 @@ import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { ErrorResponse, mostrarMensajeError } from "../../utils/errorHandling";
 import UbertoLogo from "../../components/Pestanias/UbertoLogo";
 import { Notificacion } from "../../components/Modales/Notificacion";
-import { UserLoginData } from "../../domain/usuario";
+import { UserLoginData } from "../../types/usuario";
 import { loginService } from "../../services/LoginService";
 import { useOnInit } from "../../utils/hooks";
 import { Spinner } from "../../components/Spinner";

@@ -1,5 +1,5 @@
 import  { useState } from "react";
-import { AmigoDelAmigoDTO } from "../../domain/pasajero";
+import { AmigoDelAmigoDTO } from "../../types/pasajero";
 import { Dialog, DialogTitle, DialogContent, Button, DialogActions, Typography, InputLabel, FormControl, MenuItem, Select} from "@mui/material";
 
 interface ModalAgregarAmigoProps {

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { TextField, Button, Typography, Box, Divider,  } from "@mui/material";
-import { Chofer, tipoChoferAStrPerfil } from "../../domain/chofer";
+import { TextField, Button, Typography, Box, Divider} from "@mui/material";
+import { Chofer, tipoChoferAStrPerfil } from "../../types/chofer";
 import { choferService } from "../../services/ChoferService";
 import { ErrorResponse, mostrarMensajeError } from "../../utils/errorHandling";
 import { useOnInit } from "../../utils/hooks";
@@ -19,15 +19,15 @@ export const DatosChofer = () => {
     const traerDatosChofer = async () => {
       setIsLoading(true)
       try {
-        const infoChofer = await choferService.getDatosChofer()        
-        setInfoChofer(infoChofer)      
+        const infoChofer = await choferService.getDatosChofer()
+        setInfoChofer(infoChofer)
       } catch (error) {
         mostrarMensajeError(error as ErrorResponse, setMensajeError)
         setNotificacion({
           open: true,
           mensaje:`${ mensajeError}`,
           severidad: 'error',
-        })      
+        })
       }
       finally {
         setIsLoading(false)
@@ -39,7 +39,7 @@ export const DatosChofer = () => {
       return camposObligatorios.some(campo => !infoChofer[campo])
     }
   
-    const manejoCreacionChofer = (name: keyof Chofer, value: string | number |  undefined): void => {
+    const manejoCreacionChofer = (name: keyof Chofer, value: string | number | undefined): void => {
       (infoChofer as unknown as Record<keyof Chofer, string | number | undefined>)[name] = value
       generarNuevaInfoChofer(infoChofer)
     }
@@ -55,14 +55,15 @@ export const DatosChofer = () => {
         setFromTouched(true)
         if(comprobacionDeCamposIncompletos()) {
           setNotificacion({ open: true, mensaje: "Por favor completa los campos obligatorios.", severidad: "error" });
-          return 
+          setIsLoading(false)
+          return
         }
         choferService.updateChofer(infoChofer)
-        setNotificacion({open:true, mensaje:"Se actualizaron datos correctamente", severidad:"success"})        
+        setNotificacion({open:true, mensaje:"Se actualizaron datos correctamente", severidad:"success"})
       } catch (error) {
         mostrarMensajeError(error as ErrorResponse,setMensajeError)
-        setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"})      
-      }finally {  
+        setNotificacion({open:true, mensaje:`${mensajeError}`, severidad:"error"})
+      }finally {
         setIsLoading(false)
       }
     }
@@ -157,47 +158,43 @@ export const DatosChofer = () => {
       
 
         <Divider variant="middle" component="li" sx={{borderColor: "black"}}/>
-          
+
         <Typography
-                    sx={{ display: 'flex', justifyItems: 'start', width: '100%' ,margin: '1rem' }}
-                    variant="h5"
-                    component="div"
-                    color="#4e199e"
-                    fontWeight="bold"
-                    textAlign="left"
-                >
-                    Chofer {tipoChoferAStrPerfil(infoChofer.tipoChofer)}
-                </Typography>
-        <TextField 
-            label="Dominio" 
-            fullWidth  
-            margin="normal" 
-            color="primary" 
-            name="titulo" 
+            sx={{ display: 'flex', justifyItems: 'start', width: '100%' ,margin: '1rem' }}
+            variant="h5"
+            component="div"
+            color="#4e199e"
+            fontWeight="bold"
+            textAlign="left"
+        >
+            Chofer {tipoChoferAStrPerfil(infoChofer.tipoChofer)}
+        </Typography>
+
+        <TextField
+            label="Dominio"
+            fullWidth
+            margin="normal"
+            color="primary"
+            name="titulo"
             required
-            value={ infoChofer.patenteVehiculo } 
-            onChange={(event) => manejoCreacionChofer('patenteVehiculo', event.target.value) } 
-            error={fromTouched && !infoChofer.patenteVehiculo}
-            helperText={
-            fromTouched && !infoChofer.patenteVehiculo ? (
-            <Box display="flex" alignItems="center" gap={1}>
-                <Typography color="red">El apellido es obligatorio</Typography>
-            </Box>
-            ) : ""
-            }
+            value={ infoChofer.patenteVehiculo }
+            onChange={(event) => manejoCreacionChofer('patenteVehiculo', event.target.value) }
+            error={fromTouched && (!infoChofer.patenteVehiculo )}
+            helperText={fromTouched && !infoChofer.patenteVehiculo ? "El dominio es obligatorio" : "El formato debe ser AAA000 o AA000AA"}
+            placeholder="AAA000 o AA000AA"
             sx={{
-                '& label.Mui-focused': { color: '#4e199e' }, 
+                '& label.Mui-focused': { color: '#4e199e' },
                 '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: '#4e199e' }, 
-                    '&:hover fieldset': { borderColor: '#7a3eb1' }, 
-                    '&.Mui-focused fieldset': { borderColor: '#4e199e' } 
+                    '& fieldset': { borderColor: '#4e199e' },
+                    '&:hover fieldset': { borderColor: '#7a3eb1' },
+                    '&.Mui-focused fieldset': { borderColor: '#4e199e' }
                 }
             }}
         />
 
-        //Marca del auto del chofer
+         //Marca del auto del chofer
         <TextField 
-            label="Descripcion" 
+            label="Marca del Vehículo" 
             fullWidth  
             margin="normal" 
             color="primary" 
@@ -209,7 +206,7 @@ export const DatosChofer = () => {
             helperText={
                 fromTouched && !infoChofer.marcaVehiculo ? (
                 <Box display="flex" alignItems="center" gap={1}>
-                    <Typography color="red">El apellido es obligatorio</Typography>
+                    <Typography color="red">La marca es obligatoria</Typography>
                 </Box>
                 ) : ""
             }
@@ -223,6 +220,7 @@ export const DatosChofer = () => {
             }}
         />
 
+        //Modelo del auto del chofer
         <TextField 
             label="Modelo" 
             fullWidth  
@@ -249,7 +247,7 @@ export const DatosChofer = () => {
                 }
             }}
         />
-            
+
         <Button variant="contained" onClick={()=>handleGuardarCambios( )} fullWidth sx={{backgroundColor:'var(--secondary-color)'}}>
           Guardar Cambios
         </Button>

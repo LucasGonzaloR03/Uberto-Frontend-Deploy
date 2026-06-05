@@ -3,7 +3,7 @@ import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModalBase from '../Modales/ModalEliminar';
 import React, { useState } from "react";
-import { TarjetaCalificacion } from '../../domain/calificacion';
+import { TarjetaCalificacion } from '../../types/calificacion';
 import { obtenerUserTipo  } from '../../services/UsuarioService';
 
 export interface TarjetaProps {

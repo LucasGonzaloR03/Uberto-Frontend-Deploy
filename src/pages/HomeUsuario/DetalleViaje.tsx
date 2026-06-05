@@ -1,13 +1,13 @@
 import { Box, Button, Container, Divider, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { DetalleChofer, tipoChoferAStrDetalle } from "../../domain/chofer";
+import { DetalleChofer, tipoChoferAStrDetalle } from "../../types/chofer";
 import { useState } from "react";
 import { ErrorResponse, mostrarMensajeError } from "../../utils/errorHandling";
 import { useOnInit } from "../../utils/hooks";
 import TarjetaComentario from "../../components/Tarjetas/TarjetaComentario";
 import { Notificacion } from "../../components/Modales/Notificacion";
 import { pasajeroService } from "../../services/PasajeroService";
-import { DetalleViajeDTO } from "../../domain/viaje";
+import { DetalleViajeDTO } from "../../types/viaje";
 import { obtenerUserID } from "../../services/UsuarioService";
 import dayjs from "dayjs";
 import { Spinner } from "../../components/Spinner";
