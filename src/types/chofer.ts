@@ -5,7 +5,7 @@ export class Chofer{
         public id: string = "",
         public nombre:string = '',
         public apellido:string = '',
-        public modeloVehiculo:string = '',
+        public modeloVehiculo:number = 0,
         public marcaVehiculo:string = '',
         public patenteVehiculo = '',
         public precioBase:number = 0,
@@ -52,7 +52,7 @@ export type ChoferJSON = {
     id:string,
     nombre:string,
     apellido:string,
-    modeloVehiculo:string,
+    modeloVehiculo:number,
     marcaVehiculo:string,
     patenteVehiculo:string,
     precioBase:number,
@@ -103,7 +103,7 @@ export class ChoferParaTarjeta{
     public fotoPerfil: string,
     public nombreCompleto: string,
     public marcaVehiculo: string = '',
-    public modeloVehiculo: string = '',
+    public modeloVehiculo: number = 0,
     public fotoVehiculo: string = '',
     public anioVehiculo: number = 0
     ){}
@@ -113,7 +113,7 @@ export class ChoferParaTarjeta{
             choferParaTarjetaJSON.fotoPerfil,
             choferParaTarjetaJSON.nombreCompleto,
             choferParaTarjetaJSON.marcaVehiculo || '',
-            choferParaTarjetaJSON.modeloVehiculo || '',
+            choferParaTarjetaJSON.modeloVehiculo || 0,
             choferParaTarjetaJSON.fotoVehiculo || '',
             choferParaTarjetaJSON.anioVehiculo || 0
         ))
@@ -126,7 +126,7 @@ export type ChoferParaTarjetaJSON = {
     fotoPerfil:string,
     nombreCompleto:string,
     marcaVehiculo?: string,
-    modeloVehiculo?: string,
+    modeloVehiculo?: number,
     fotoVehiculo?: string,
     anioVehiculo?: number
 }

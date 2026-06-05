@@ -20,7 +20,7 @@ export interface RegisterData {
     precioBase?: number
     patenteVehiculo: string
     marcaVehiculo: string
-    modeloVehiculo: string
+    modeloVehiculo: number
     fechaNacimiento: string
     telefono: string
     fotoPerfil?: string
@@ -36,7 +36,7 @@ const Register = () => {
         role: '',
         tipoChofer: 'CSIMPLE',
         patenteVehiculo: '',
-        modeloVehiculo: '',
+        modeloVehiculo: 0,
         telefono: '',
         fechaNacimiento: '',
         marcaVehiculo: '',
@@ -341,6 +341,7 @@ const Register = () => {
                                 <TextField
                                     label="Modelo del Auto"
                                     name="modeloVehiculo"
+                                    type="number"
                                     size="small"
                                     onChange={handleChange}
                                     error={fromTouched && !formData.modeloVehiculo}

@@ -218,6 +218,7 @@ export const DatosChofer = () => {
                 color="primary" 
                 name="modeloVehiculo"
                 required
+                type="number"
                 value={infoChofer.modeloVehiculo} 
                 onChange={(event) => manejoCreacionChofer('modeloVehiculo', event.target.value)} 
                 error={fromTouched && !infoChofer.modeloVehiculo}
